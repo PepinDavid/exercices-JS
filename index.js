@@ -473,3 +473,120 @@ function flatten(arr) {
 
     return array;
 }
+
+//Exercice18
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
+function timeout(value, cb) {
+    const t = getRandomInt(1000);
+    console.log(t)
+    setTimeout(() => {
+        cb(value)
+    }, t)
+}
+
+function promiseAddition(value) {
+    return new Promise((res) => {
+        timeout(value + 2, res);
+    });
+}
+
+function promiseMultiply(value) {
+    return new Promise((res) => {
+        timeout(value * 4, res);
+    });
+}
+
+function promiseModulo(value) {
+    return new Promise((res) => {
+        timeout(value % 3, res);
+    });
+}
+
+//Exercice 19
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
+function timeout(value, cb) {
+    const t = getRandomInt(5000);
+    console.log(t)
+    setTimeout(() => {
+        cb(value)
+    }, t)
+}
+
+function fetchData(data) {
+    return new Promise((res, rej) => {
+        const random = getRandomInt(10);
+
+        if (random > 5) rej("Error fetch data");
+
+        timeout(data, res);
+    })
+}
+
+function fetchDataWithRetry(data, retries = 3) {
+    return fetchData(data).catch(err => {
+        console.error(err);
+        if (retries > 0) {
+            console.log(`Retrying... Attempts left: ${retries}`);
+            return fetchDataWithRetry(data, retries - 1);
+        } else {
+            throw new Error("All retries failed.");
+        }
+    });
+}
+
+
+// Exercice bonus 
+// create an algorithm who log time each second and then write finish (condition: use promise)
+
+function timeoutWrite(value) {
+    return new Promise((res) => {
+        setTimeout(() => {
+            res(value);
+        }, value * 1000);
+    })
+}
+
+//exemple:
+let finish;
+for (let i = 1; i < 4; i++) {
+    finish = i;
+    timeoutWrite(i).then(console.log);
+}
+
+timeoutWrite(finish).then(() => console.log('finish'));
+
+// without promise in loop for
+let end;
+for (let i = 1; i < 4; i++) {
+    end = i;
+    setTimeout(() => {
+        console.log(i);
+    }, i * 1000);
+}
+timeoutWrite(end).then(() => console.log('finish'));
+
+
+//Exercice 20
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
+function timeout(value, cb) {
+    const t = getRandomInt(5000);
+    console.log(t)
+    setTimeout(() => {
+        cb(value)
+    }, t)
+}
+
+function taskPromise(data) {
+    return new Promise((res) => {
+        timeout(data, res);
+    })
+}

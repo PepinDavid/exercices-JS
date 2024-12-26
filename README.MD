@@ -33,3 +33,25 @@
 - The most frequent word.
 
 16/ Create a function `flatten` that takes a nested array and returns a flattened array.
+
+18/ Chain several promises to retrieve data successively.
+- Create three asynchronous functions (`step1`, `step2`, `step3`) that return promises.
+- Each function takes an input value, modifies it (for example, by incrementing or multiplying) and returns it after a random delay.
+- Chain these three functions together, starting from value 1.
+
+19/ Simulate errors in a promise chain.
+- Creates a `fetchData` function that returns a promise with a random delay.
+- This promise fails randomly (50% of cases).
+- Implements a promise chain with `then` and `catch` to handle errors.
+
+**Bonus**: Relaunches a new request in the event of an error.
+
+20/ Launch several asynchronous tasks in parallel.
+- Create an array of asynchronous functions (e.g. 5 tasks that return values after a random delay).
+- Use `Promise.all` to execute these tasks in parallel and retrieve their results.
+Exemple:
+```js
+    const tasks = [task1(), task2(), task3(), task4(), task5()];
+    const results = await Promise.all(tasks);
+    console.log(results); // [val1, val2, val3, val4, val5]
+```
