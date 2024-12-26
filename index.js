@@ -275,7 +275,7 @@ function createPrototype(parent) {
 }
 
 
-//exercices 11
+//Exercice 10
 function toRoman(num) {
     if (!num) throw new Error('Function takes one argument number');
 
@@ -330,7 +330,7 @@ function toRoman(num) {
 }
 
 
-// Exercice 12
+//Exercice 11
 function sortByFrequency(str) {
     if (typeof str !== 'string') throw new Error('Argument must be a string');
 
@@ -364,7 +364,7 @@ function sortByFrequency(str) {
     }
 }
 
-// Exercice 13
+//Exercice 12
 function executeTasks(tasks, timeout) {
     return new Promise((res) => {
         const winningTasks = tasks
@@ -386,7 +386,7 @@ function executeTasks(tasks, timeout) {
     }
 }
 
-// Exercice 14
+//Exercice 13
 class LRUCache {
     #map = new Map();
     #maxSize = 0;
@@ -417,7 +417,7 @@ class LRUCache {
     }
 }
 
-//Exercice 15
+//Exercice 14
 function analyzeText(text) {
     if (typeof text !== 'string') throw new Error('Argument must be a string');
     
@@ -458,7 +458,7 @@ function analyzeText(text) {
 }
   
 
-//Exercice 16
+//Exercice 15
 function flatten(arr) {
     const array = [];
 
@@ -474,7 +474,7 @@ function flatten(arr) {
     return array;
 }
 
-//Exercice18
+//Exercice 16
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -505,7 +505,7 @@ function promiseModulo(value) {
     });
 }
 
-//Exercice 19
+//Exercice 17
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -540,9 +540,7 @@ function fetchDataWithRetry(data, retries = 3) {
     });
 }
 
-
-// Exercice bonus 
-// create an algorithm who log time each second and then write finish (condition: use promise)
+//Exercice 18
 
 function timeoutWrite(value) {
     return new Promise((res) => {
@@ -572,7 +570,7 @@ for (let i = 1; i < 4; i++) {
 timeoutWrite(end).then(() => console.log('finish'));
 
 
-//Exercice 20
+//Exercice 19
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -590,3 +588,193 @@ function taskPromise(data) {
         timeout(data, res);
     })
 }
+
+//Exercice 20
+function task(data, timeoutMS) {
+    return new Promise((res, rej) => {
+        if (!data) rej('Error: data is empty');
+
+        setTimeout(() => {
+            console.log(`"${data}" resolved after ${timeoutMS}ms`);
+            res(data);
+        }, timeoutMS);
+    });
+}
+
+Promise.race([task("task1", 300), task("task2", 200), task("task3", 250)]).then(console.log).catch(console.error)
+//or
+const tasks = [
+    () => task("task1", 300),
+    () => task("task2", 200),
+    () => task("task3", 250)
+];
+
+Promise.race(tasks.map(fn => fn())).then(console.log).catch(console.error)
+
+// Exercice 21
+function task(name, delay) {
+    return () => new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(name);
+        }, delay);
+    });
+}
+
+const tasks = [
+    task("A", 100),
+    task("B", 200),
+    task("C", 150)
+];
+
+tasks.reduce((promise, task) => 
+    promise.then((arr) => 
+        task().then(d => arr.concat(d))
+    ), 
+    Promise.resolve([])
+).then(result => console.log("All tasks done:", result));
+// or
+await tasks.reduce(async (arrayPromise, task) => {
+    try {
+        const array = await arrayPromise;
+        const t = await task();
+        
+        return [...array, t];
+    } catch (error) {
+        console.error(error);
+    } 
+}, Promise.resolve([]));
+
+// Exercice 22
+const fetchData = async (num) => {
+    return `fetch data ${num}`   
+}
+// Limit call
+const throttledFetch = (fn, delay) => {
+    let isThrottled = false;
+
+    return async function(...args) {
+        if (isThrottled) {
+            console.log(`function ${fn.name} is not finished`);
+            return;
+        };
+
+        isThrottled = true;
+
+        try {
+            return await fn(...args);
+
+        } catch(error) {
+            console.error(error);
+        } finally {
+            setTimeout(() => {
+                isThrottled = false;
+            }, delay);
+        }
+    }
+}
+// or
+function throttledFetch(fn, delay) {
+    let isThrottled = false;
+
+    return function(...args) {
+        return new Promise((res, rej) => {
+            if (isThrottled) return;
+    
+            isThrottled = true;
+    
+            fn(...args)
+            .then(res)
+            .catch(rej)
+            .finally(() => {
+                setTimeout(() => {
+                    isThrottled = false;
+                }, delay);
+            })
+        });
+    }
+}
+
+tf = throttledFetch(fetchData, 2000);
+
+tf(5).then(console.log)
+tf(8).then(console.log)
+setTimeout(() => tf(15).then(console.log), 2500)
+// or
+let a = await tf(54);
+let b = await tf(54);
+console.log(a);
+console.log(b);
+setTimeout(async () => { let c = await tf(15); console.log(c);}, 2500);
+
+//Exercice 23
+const slowFunction = async (x) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return x * 2;
+};
+
+function memoizeAsync(fn) {
+    const memo = {};
+
+    return async function(...args) {
+        if (memo[args.join('')])
+            return memo[args.join('')];
+
+        try {
+            const res = await fn(...args);
+
+            memo[args.join('')] = res;
+
+            return res;
+        } catch(err) {
+            console.error(error)
+        }
+    }
+}
+// or
+function memoizePromise(fn) {
+    const memo = {};
+
+    return function(...args) {
+        return new Promise((res) => {
+            if (memo[args.join('')])
+                res(memo[args.join('')]);
+
+            fn(...args)
+            .then((data) => {
+                memo[args.join('')] = data;
+
+                res(data)
+            });
+        });
+    }
+}
+
+const memoizedSlowPromise = memoizePromise(slowFunction);
+const memoizedSlowFunction = memoizeAsync(slowFunction);
+
+console.log(await memoizedSlowFunction(2)); // wait 1s, result: 4
+console.log(await memoizedSlowFunction(2)); // instantatly result: 4
+
+console.log(await memoizedSlowPromise(2)); // wait 1s, result: 4
+console.log(await memoizedSlowPromise(2)); // instantatly result: 4
+
+//Exercice 24
+const double = (x) => x * 2;
+const increment = (x) => x + 1;
+const square = (x) => x ** 2;
+
+const addData = (data) => ({...data, years: 2024});
+const changeData = (data) =>({...data, lastname: data.firstname, firstname: data.lastname}); 
+
+function pipeline(value, ...fns){
+    if (![...fns].every(fn => fn instanceof Function)) throw new Error('args must be functions');
+
+    for(const fn of fns) {
+        value = fn(value)
+    }
+
+    return value;
+}
+
+console.log(pipeline(2, double, increment, square));
+console.log(pipeline({lastname: "John", firstname: "Doe"}, addData, changeData));
