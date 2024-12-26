@@ -79,3 +79,9 @@ Exemple:
 24/ **Objective**: Create a “pipeline” to execute multiple functions on a given value.
 - Implement a `pipeline` function that takes a series of functions and executes them in order on a given value.
 
+25/ **Objective**: Implement retry logic for an asynchronous function.
+- Create a `retryAsync` function that takes as parameters:
+    - An asynchronous function (`fn`),
+    - A maximum number of retries (`retries`),
+    - A delay between each retry (`delay`).
+

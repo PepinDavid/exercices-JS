@@ -778,3 +778,58 @@ function pipeline(value, ...fns){
 
 console.log(pipeline(2, double, increment, square));
 console.log(pipeline({lastname: "John", firstname: "Doe"}, addData, changeData));
+
+//Exercice 25
+const fetchData = async () => {
+    if (Math.random() < 0.7) throw new Error("Failed");
+    return "Success";
+};
+
+const fetchError = async () => {
+    throw new Error("Failed");
+}
+  
+const retryAsync = async (fn, retries, delay) => {
+    for (let i = 0; i <= retries; i++) {
+        try {
+            return await fn();
+        } catch (err) {
+            if (i === retries) throw err;
+            await new Promise((res) => setTimeout(res, delay));
+        }
+    }
+};
+
+retryAsync(fetchData, 3, 1000)
+    .then(console.log)
+    .catch(console.error);
+
+retryAsync(fetchError, 3, 1000)
+    .then(console.log)
+    .catch(console.error);
+
+function retryPromise(fn, retries, delay) {
+    return fn().catch(err => {
+        return new Promise((res, rej) => {
+            if (retries > 0) {
+                setTimeout(() => {
+                    retries -= 1;
+                    res(retryPromise(fn, retries, delay));
+                }, delay);
+            } else {
+                if (err)
+                    rej(err);
+                else
+                    rej('End retries')
+            }
+        });
+    });
+}
+
+retryPromise(fetchData, 3, 1000)
+    .then(console.log)
+    .catch(console.error);
+
+retryPromise(fetchError, 3, 1000)
+    .then(console.log)
+    .catch(console.error);
