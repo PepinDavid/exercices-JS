@@ -1,5 +1,3 @@
-
-
 //Exercice 1
 function areAnagrams(str1, str2) {
     if (str1.length !== str2.length) return false;
@@ -833,3 +831,49 @@ retryPromise(fetchData, 3, 1000)
 retryPromise(fetchError, 3, 1000)
     .then(console.log)
     .catch(console.error);
+
+//Exercice 26
+class Stack {
+    #stack = [];
+
+    push(item) {
+        this.#stack.push(item);
+    }
+
+    peek() {
+        return this.#stack[this.#stack.length -1];
+    }
+
+    pop() {
+        return this.#stack.pop();
+    }
+
+    size() {
+        return this.#stack.length;
+    }
+
+    isEmpty() {
+        return !this.#stack.length
+    }
+}
+
+//Exercice 27
+function runSequentially(promises) {
+    const now = Date.now();
+
+    return new Promise((res, rej) => {
+        let accPromise = Promise.resolve([]);
+
+        for (const promise of promises) {
+            accPromise = accPromise
+            .then((acc) => 
+                promise()
+                .then(data => [...acc, data])
+                .catch(err => [...acc, err]),
+            );
+        }
+
+        accPromise.then(d => res({data: d, deltaTime: (Date.now() - now) / 1000}))
+        .catch(rej);
+    })
+}

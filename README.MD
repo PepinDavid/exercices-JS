@@ -85,3 +85,12 @@ Exemple:
     - A maximum number of retries (`retries`),
     - A delay between each retry (`delay`).
 
+26/ **Purpose**: Implements a stack data structure with a class.
+- Implements a `Stack` class with the following methods:
+    - push(item)` : adds an item.
+    - pop()` : removes the last item.
+    - peek()`: returns the last item without removing it.
+    - isEmpty()`: returns `true` if the stack is empty.
+    - size()`: returns the size of the stack.
+
+27/ 
