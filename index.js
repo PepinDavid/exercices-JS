@@ -877,3 +877,98 @@ function runSequentially(promises) {
         .catch(rej);
     })
 }
+
+//Exercice 28
+const compose = (...fns) => {
+    return function(arg) {
+        fns.forEach(fn => arg = fn(arg))
+
+        return arg;
+    }
+}
+
+//Exercice 29
+const recursiveFilter = (array, callback) => {
+    const response = [];
+    let index = 0;
+
+    return recursive(array, index, response, callback);
+
+    function recursive(arr, ind, resp, cb) {
+        if (arr.length === ind) return resp;
+
+        const element = arr[ind];
+        ind += 1;
+
+        if (cb(element)) resp.push(element);
+
+        return recursive(arr, ind, resp, cb)
+    }
+}
+
+//Exercice 30
+class Queue {
+    #queue = [];
+
+    enqueue(item) {
+        this.#queue.push(item);
+    }
+
+    dequeue() {
+        return this.#queue.shift();
+    }
+
+    peek() {
+        return this.#queue[0];
+    }
+
+    isEmpty() {
+        return !this.#queue.length;
+    }
+
+    size() {
+        return this.#queue.length;
+    }
+}
+
+//Exercice 31
+function binarySearch(arraySorted, element) {
+    let index = -1;
+    
+    for (let i = 0; i < arraySorted.length; i++) {
+        if (arraySorted[i] === element) index = i;
+    }
+
+    return index;
+}
+
+//Exercice 32
+const retry = async (promise, maxCall, intervalCall) => {
+    for (let i = 0; i <= maxCall; i++) {
+        try {
+            return await promise();
+        } catch(error) {
+            if (i === maxCall) throw error;
+
+            await new Promise((res) => setTimeout(res, intervalCall));
+        }
+    }
+}
+// or
+function retry(promise, retriesCall, intervalCall) {
+    return promise().catch((err) => {
+        return new Promise((res, rej) => {
+            if (retriesCall) {
+                retriesCall--;
+
+                setTimeout(() => res(retry(promise, retriesCall, intervalCall)), intervalCall);
+            } else {
+                if (err) {
+                    rej(err);
+                } else {
+                    rej('End retries call');
+                }
+            }
+        });
+    });
+}

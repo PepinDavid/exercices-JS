@@ -85,7 +85,7 @@ Exemple:
     - A maximum number of retries (`retries`),
     - A delay between each retry (`delay`).
 
-26/ **Purpose**: Implements a stack data structure with a class.
+26/ **Objective**: Implements a stack data structure with a class.
 - Implements a `Stack` class with the following methods:
     - push(item)` : adds an item.
     - pop()` : removes the last item.
@@ -93,4 +93,28 @@ Exemple:
     - isEmpty()`: returns `true` if the stack is empty.
     - size()`: returns the size of the stack.
 
-27/ 
+27/ **Objective**: Implement a function to run asynchronous tasks **sequentially**.
+- Write a function `runSequentially(tasks)` that takes an array of functions returning promises.
+- Execute each function sequentially.
+
+28/ **Objective**: Implements a `compose` function to chain several functions.
+- The `compose` function must apply functions from right to left.
+
+29/ **Objective**: Implement a recursive function to filter an array.
+- Write a function `recursiveFilter(array, predicate)` that recursively filters an array using a predicate.
+
+30/ **Objective**: Implements a **file** data structure with a class.
+- Implements a `Queue` class with the following methods:
+    - `queue(item)`: adds an item to the queue.
+    - dequeue()` : removes the first item.
+    - peek()`: returns the first item without removing it.
+    - isEmpty()`: returns `true` if the queue is empty.
+    - size()`: returns the size of the queue.
+
+31/ **Objective**: Implement the binary search algorithm for a sorted array.
+- Write a `binarySearch` function that takes a sorted array and a target value, and returns the index of the value or `-1` if not found.
+
+32/ **Objective**: Implement a function that attempts to restart an asynchronous task on failure.
+- Creates a `retry(fn, retries, delay)` function that executes `fn` (an asynchronous function).
+- If `fn` fails, it is restarted up to `retries` times, with a delay between each attempt.
+
